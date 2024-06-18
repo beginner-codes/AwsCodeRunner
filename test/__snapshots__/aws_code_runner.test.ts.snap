@@ -13,7 +13,17 @@ exports[`CodeRunnerStack matches snapshot 1`] = `
     "CodeRunnerLambdaConstructAccessKeySecretDBE31269": {
       "DeletionPolicy": "Delete",
       "Properties": {
-        "Name": "CodeRunnerInvocationAccessKey",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "CodeRunnerInvocationAccessKeyId",
+              {
+                "Ref": "CodeRunnerLambdaConstructCodeRunnerLambdaAccessKey3EFBA665",
+              },
+            ],
+          ],
+        },
         "SecretString": {
           "Fn::GetAtt": [
             "CodeRunnerLambdaConstructCodeRunnerLambdaAccessKey3EFBA665",
@@ -27,14 +37,19 @@ exports[`CodeRunnerStack matches snapshot 1`] = `
     "CodeRunnerLambdaConstructCodeRunnerLambda1B9774BA": {
       "DependsOn": [
         "CodeRunnerLambdaConstructCodeRunnerLambdaServiceRole3FF74FA3",
+        "CodeRunnerLambdaConstructCodeRunnerLambdaVpcPrivateSubnet1DefaultRoute6AF29E3F",
+        "CodeRunnerLambdaConstructCodeRunnerLambdaVpcPrivateSubnet1RouteTableAssociation4490A90B",
+        "CodeRunnerLambdaConstructCodeRunnerLambdaVpcPrivateSubnet2DefaultRoute145E4218",
+        "CodeRunnerLambdaConstructCodeRunnerLambdaVpcPrivateSubnet2RouteTableAssociation42AF5F97",
       ],
       "Properties": {
         "Code": {
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "ce78d53e1b33e728e34c9e0ef9edae212fb6365423dd9287dfeb512828bd5b89.zip",
+          "S3Key": "e34bb70fc03d63b4e4403f7bb966e9d56f8e650b80329d7cba34d5fe03ae8a10.zip",
         },
+        "Description": "3735afd273444d8d0a557abce0a67ef41735abe16fa6a4af4530306f1068be94",
         "FunctionName": "CodeRunnerLambda",
         "Handler": "main.run",
         "Role": {
@@ -44,6 +59,25 @@ exports[`CodeRunnerStack matches snapshot 1`] = `
           ],
         },
         "Runtime": "python3.12",
+        "Timeout": 3,
+        "VpcConfig": {
+          "SecurityGroupIds": [
+            {
+              "Fn::GetAtt": [
+                "CodeRunnerLambdaConstructCodeRunnerLambdaSecurityGroup4BD85287",
+                "GroupId",
+              ],
+            },
+          ],
+          "SubnetIds": [
+            {
+              "Ref": "CodeRunnerLambdaConstructCodeRunnerLambdaVpcPrivateSubnet1SubnetE4CD332C",
+            },
+            {
+              "Ref": "CodeRunnerLambdaConstructCodeRunnerLambdaVpcPrivateSubnet2SubnetA0E6BBB2",
+            },
+          ],
+        },
       },
       "Type": "AWS::Lambda::Function",
     },
@@ -55,7 +89,73 @@ exports[`CodeRunnerStack matches snapshot 1`] = `
       },
       "Type": "AWS::IAM::AccessKey",
     },
+    "CodeRunnerLambdaConstructCodeRunnerLambdaAliaslive4D93CA56": {
+      "DependsOn": [
+        "CodeRunnerLambdaConstructCodeRunnerLambdaVpcPrivateSubnet1DefaultRoute6AF29E3F",
+        "CodeRunnerLambdaConstructCodeRunnerLambdaVpcPrivateSubnet1RouteTableAssociation4490A90B",
+        "CodeRunnerLambdaConstructCodeRunnerLambdaVpcPrivateSubnet2DefaultRoute145E4218",
+        "CodeRunnerLambdaConstructCodeRunnerLambdaVpcPrivateSubnet2RouteTableAssociation42AF5F97",
+      ],
+      "Properties": {
+        "FunctionName": {
+          "Ref": "CodeRunnerLambdaConstructCodeRunnerLambda1B9774BA",
+        },
+        "FunctionVersion": {
+          "Fn::GetAtt": [
+            "CodeRunnerLambdaConstructCodeRunnerLambdaCurrentVersionF77F62068ac51b79e9ada01c962eaa45cffe1f70",
+            "Version",
+          ],
+        },
+        "Name": "live",
+        "ProvisionedConcurrencyConfig": {
+          "ProvisionedConcurrentExecutions": 1,
+        },
+      },
+      "Type": "AWS::Lambda::Alias",
+    },
+    "CodeRunnerLambdaConstructCodeRunnerLambdaCurrentVersionF77F62068ac51b79e9ada01c962eaa45cffe1f70": {
+      "DependsOn": [
+        "CodeRunnerLambdaConstructCodeRunnerLambdaVpcPrivateSubnet1DefaultRoute6AF29E3F",
+        "CodeRunnerLambdaConstructCodeRunnerLambdaVpcPrivateSubnet1RouteTableAssociation4490A90B",
+        "CodeRunnerLambdaConstructCodeRunnerLambdaVpcPrivateSubnet2DefaultRoute145E4218",
+        "CodeRunnerLambdaConstructCodeRunnerLambdaVpcPrivateSubnet2RouteTableAssociation42AF5F97",
+      ],
+      "Properties": {
+        "FunctionName": {
+          "Ref": "CodeRunnerLambdaConstructCodeRunnerLambda1B9774BA",
+        },
+      },
+      "Type": "AWS::Lambda::Version",
+    },
+    "CodeRunnerLambdaConstructCodeRunnerLambdaSecurityGroup4BD85287": {
+      "DependsOn": [
+        "CodeRunnerLambdaConstructCodeRunnerLambdaVpcPrivateSubnet1DefaultRoute6AF29E3F",
+        "CodeRunnerLambdaConstructCodeRunnerLambdaVpcPrivateSubnet1RouteTableAssociation4490A90B",
+        "CodeRunnerLambdaConstructCodeRunnerLambdaVpcPrivateSubnet2DefaultRoute145E4218",
+        "CodeRunnerLambdaConstructCodeRunnerLambdaVpcPrivateSubnet2RouteTableAssociation42AF5F97",
+      ],
+      "Properties": {
+        "GroupDescription": "Automatic security group for Lambda Function MyTestStackCodeRunnerLambdaConstructCodeRunnerLambdaB30127DB",
+        "SecurityGroupEgress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "VpcId": {
+          "Ref": "CodeRunnerLambdaConstructCodeRunnerLambdaVpc2213FFDC",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
     "CodeRunnerLambdaConstructCodeRunnerLambdaServiceRole3FF74FA3": {
+      "DependsOn": [
+        "CodeRunnerLambdaConstructCodeRunnerLambdaVpcPrivateSubnet1DefaultRoute6AF29E3F",
+        "CodeRunnerLambdaConstructCodeRunnerLambdaVpcPrivateSubnet1RouteTableAssociation4490A90B",
+        "CodeRunnerLambdaConstructCodeRunnerLambdaVpcPrivateSubnet2DefaultRoute145E4218",
+        "CodeRunnerLambdaConstructCodeRunnerLambdaVpcPrivateSubnet2RouteTableAssociation42AF5F97",
+      ],
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [
@@ -82,9 +182,412 @@ exports[`CodeRunnerStack matches snapshot 1`] = `
               ],
             ],
           },
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole",
+              ],
+            ],
+          },
         ],
       },
       "Type": "AWS::IAM::Role",
+    },
+    "CodeRunnerLambdaConstructCodeRunnerLambdaVpc2213FFDC": {
+      "Properties": {
+        "CidrBlock": "10.0.0.0/16",
+        "EnableDnsHostnames": true,
+        "EnableDnsSupport": true,
+        "InstanceTenancy": "default",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "MyTestStack/CodeRunnerLambdaConstruct/CodeRunnerLambdaVpc",
+          },
+        ],
+      },
+      "Type": "AWS::EC2::VPC",
+    },
+    "CodeRunnerLambdaConstructCodeRunnerLambdaVpcIGWD1124BFC": {
+      "Properties": {
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "MyTestStack/CodeRunnerLambdaConstruct/CodeRunnerLambdaVpc",
+          },
+        ],
+      },
+      "Type": "AWS::EC2::InternetGateway",
+    },
+    "CodeRunnerLambdaConstructCodeRunnerLambdaVpcPrivateSubnet1DefaultRoute6AF29E3F": {
+      "Properties": {
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "NatGatewayId": {
+          "Ref": "CodeRunnerLambdaConstructCodeRunnerLambdaVpcPublicSubnet1NATGateway24639D47",
+        },
+        "RouteTableId": {
+          "Ref": "CodeRunnerLambdaConstructCodeRunnerLambdaVpcPrivateSubnet1RouteTable9D679F35",
+        },
+      },
+      "Type": "AWS::EC2::Route",
+    },
+    "CodeRunnerLambdaConstructCodeRunnerLambdaVpcPrivateSubnet1RouteTable9D679F35": {
+      "Properties": {
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "MyTestStack/CodeRunnerLambdaConstruct/CodeRunnerLambdaVpc/PrivateSubnet1",
+          },
+        ],
+        "VpcId": {
+          "Ref": "CodeRunnerLambdaConstructCodeRunnerLambdaVpc2213FFDC",
+        },
+      },
+      "Type": "AWS::EC2::RouteTable",
+    },
+    "CodeRunnerLambdaConstructCodeRunnerLambdaVpcPrivateSubnet1RouteTableAssociation4490A90B": {
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "CodeRunnerLambdaConstructCodeRunnerLambdaVpcPrivateSubnet1RouteTable9D679F35",
+        },
+        "SubnetId": {
+          "Ref": "CodeRunnerLambdaConstructCodeRunnerLambdaVpcPrivateSubnet1SubnetE4CD332C",
+        },
+      },
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+    },
+    "CodeRunnerLambdaConstructCodeRunnerLambdaVpcPrivateSubnet1SubnetE4CD332C": {
+      "Properties": {
+        "AvailabilityZone": {
+          "Fn::Select": [
+            0,
+            {
+              "Fn::GetAZs": "",
+            },
+          ],
+        },
+        "CidrBlock": "10.0.128.0/18",
+        "MapPublicIpOnLaunch": false,
+        "Tags": [
+          {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Private",
+          },
+          {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Private",
+          },
+          {
+            "Key": "Name",
+            "Value": "MyTestStack/CodeRunnerLambdaConstruct/CodeRunnerLambdaVpc/PrivateSubnet1",
+          },
+        ],
+        "VpcId": {
+          "Ref": "CodeRunnerLambdaConstructCodeRunnerLambdaVpc2213FFDC",
+        },
+      },
+      "Type": "AWS::EC2::Subnet",
+    },
+    "CodeRunnerLambdaConstructCodeRunnerLambdaVpcPrivateSubnet2DefaultRoute145E4218": {
+      "Properties": {
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "NatGatewayId": {
+          "Ref": "CodeRunnerLambdaConstructCodeRunnerLambdaVpcPublicSubnet2NATGateway5296E8B1",
+        },
+        "RouteTableId": {
+          "Ref": "CodeRunnerLambdaConstructCodeRunnerLambdaVpcPrivateSubnet2RouteTable1D72EF31",
+        },
+      },
+      "Type": "AWS::EC2::Route",
+    },
+    "CodeRunnerLambdaConstructCodeRunnerLambdaVpcPrivateSubnet2RouteTable1D72EF31": {
+      "Properties": {
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "MyTestStack/CodeRunnerLambdaConstruct/CodeRunnerLambdaVpc/PrivateSubnet2",
+          },
+        ],
+        "VpcId": {
+          "Ref": "CodeRunnerLambdaConstructCodeRunnerLambdaVpc2213FFDC",
+        },
+      },
+      "Type": "AWS::EC2::RouteTable",
+    },
+    "CodeRunnerLambdaConstructCodeRunnerLambdaVpcPrivateSubnet2RouteTableAssociation42AF5F97": {
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "CodeRunnerLambdaConstructCodeRunnerLambdaVpcPrivateSubnet2RouteTable1D72EF31",
+        },
+        "SubnetId": {
+          "Ref": "CodeRunnerLambdaConstructCodeRunnerLambdaVpcPrivateSubnet2SubnetA0E6BBB2",
+        },
+      },
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+    },
+    "CodeRunnerLambdaConstructCodeRunnerLambdaVpcPrivateSubnet2SubnetA0E6BBB2": {
+      "Properties": {
+        "AvailabilityZone": {
+          "Fn::Select": [
+            1,
+            {
+              "Fn::GetAZs": "",
+            },
+          ],
+        },
+        "CidrBlock": "10.0.192.0/18",
+        "MapPublicIpOnLaunch": false,
+        "Tags": [
+          {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Private",
+          },
+          {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Private",
+          },
+          {
+            "Key": "Name",
+            "Value": "MyTestStack/CodeRunnerLambdaConstruct/CodeRunnerLambdaVpc/PrivateSubnet2",
+          },
+        ],
+        "VpcId": {
+          "Ref": "CodeRunnerLambdaConstructCodeRunnerLambdaVpc2213FFDC",
+        },
+      },
+      "Type": "AWS::EC2::Subnet",
+    },
+    "CodeRunnerLambdaConstructCodeRunnerLambdaVpcPublicSubnet1DefaultRoute1B93415D": {
+      "DependsOn": [
+        "CodeRunnerLambdaConstructCodeRunnerLambdaVpcVPCGW7B499723",
+      ],
+      "Properties": {
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "GatewayId": {
+          "Ref": "CodeRunnerLambdaConstructCodeRunnerLambdaVpcIGWD1124BFC",
+        },
+        "RouteTableId": {
+          "Ref": "CodeRunnerLambdaConstructCodeRunnerLambdaVpcPublicSubnet1RouteTable915E77D5",
+        },
+      },
+      "Type": "AWS::EC2::Route",
+    },
+    "CodeRunnerLambdaConstructCodeRunnerLambdaVpcPublicSubnet1EIP258DAD7B": {
+      "Properties": {
+        "Domain": "vpc",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "MyTestStack/CodeRunnerLambdaConstruct/CodeRunnerLambdaVpc/PublicSubnet1",
+          },
+        ],
+      },
+      "Type": "AWS::EC2::EIP",
+    },
+    "CodeRunnerLambdaConstructCodeRunnerLambdaVpcPublicSubnet1NATGateway24639D47": {
+      "DependsOn": [
+        "CodeRunnerLambdaConstructCodeRunnerLambdaVpcPublicSubnet1DefaultRoute1B93415D",
+        "CodeRunnerLambdaConstructCodeRunnerLambdaVpcPublicSubnet1RouteTableAssociationBABA78DD",
+      ],
+      "Properties": {
+        "AllocationId": {
+          "Fn::GetAtt": [
+            "CodeRunnerLambdaConstructCodeRunnerLambdaVpcPublicSubnet1EIP258DAD7B",
+            "AllocationId",
+          ],
+        },
+        "SubnetId": {
+          "Ref": "CodeRunnerLambdaConstructCodeRunnerLambdaVpcPublicSubnet1Subnet3EADA313",
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "MyTestStack/CodeRunnerLambdaConstruct/CodeRunnerLambdaVpc/PublicSubnet1",
+          },
+        ],
+      },
+      "Type": "AWS::EC2::NatGateway",
+    },
+    "CodeRunnerLambdaConstructCodeRunnerLambdaVpcPublicSubnet1RouteTable915E77D5": {
+      "Properties": {
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "MyTestStack/CodeRunnerLambdaConstruct/CodeRunnerLambdaVpc/PublicSubnet1",
+          },
+        ],
+        "VpcId": {
+          "Ref": "CodeRunnerLambdaConstructCodeRunnerLambdaVpc2213FFDC",
+        },
+      },
+      "Type": "AWS::EC2::RouteTable",
+    },
+    "CodeRunnerLambdaConstructCodeRunnerLambdaVpcPublicSubnet1RouteTableAssociationBABA78DD": {
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "CodeRunnerLambdaConstructCodeRunnerLambdaVpcPublicSubnet1RouteTable915E77D5",
+        },
+        "SubnetId": {
+          "Ref": "CodeRunnerLambdaConstructCodeRunnerLambdaVpcPublicSubnet1Subnet3EADA313",
+        },
+      },
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+    },
+    "CodeRunnerLambdaConstructCodeRunnerLambdaVpcPublicSubnet1Subnet3EADA313": {
+      "Properties": {
+        "AvailabilityZone": {
+          "Fn::Select": [
+            0,
+            {
+              "Fn::GetAZs": "",
+            },
+          ],
+        },
+        "CidrBlock": "10.0.0.0/18",
+        "MapPublicIpOnLaunch": true,
+        "Tags": [
+          {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Public",
+          },
+          {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Public",
+          },
+          {
+            "Key": "Name",
+            "Value": "MyTestStack/CodeRunnerLambdaConstruct/CodeRunnerLambdaVpc/PublicSubnet1",
+          },
+        ],
+        "VpcId": {
+          "Ref": "CodeRunnerLambdaConstructCodeRunnerLambdaVpc2213FFDC",
+        },
+      },
+      "Type": "AWS::EC2::Subnet",
+    },
+    "CodeRunnerLambdaConstructCodeRunnerLambdaVpcPublicSubnet2DefaultRoute3DBCCDA4": {
+      "DependsOn": [
+        "CodeRunnerLambdaConstructCodeRunnerLambdaVpcVPCGW7B499723",
+      ],
+      "Properties": {
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "GatewayId": {
+          "Ref": "CodeRunnerLambdaConstructCodeRunnerLambdaVpcIGWD1124BFC",
+        },
+        "RouteTableId": {
+          "Ref": "CodeRunnerLambdaConstructCodeRunnerLambdaVpcPublicSubnet2RouteTable3972B96F",
+        },
+      },
+      "Type": "AWS::EC2::Route",
+    },
+    "CodeRunnerLambdaConstructCodeRunnerLambdaVpcPublicSubnet2EIP1CA7F968": {
+      "Properties": {
+        "Domain": "vpc",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "MyTestStack/CodeRunnerLambdaConstruct/CodeRunnerLambdaVpc/PublicSubnet2",
+          },
+        ],
+      },
+      "Type": "AWS::EC2::EIP",
+    },
+    "CodeRunnerLambdaConstructCodeRunnerLambdaVpcPublicSubnet2NATGateway5296E8B1": {
+      "DependsOn": [
+        "CodeRunnerLambdaConstructCodeRunnerLambdaVpcPublicSubnet2DefaultRoute3DBCCDA4",
+        "CodeRunnerLambdaConstructCodeRunnerLambdaVpcPublicSubnet2RouteTableAssociationABFB5F7E",
+      ],
+      "Properties": {
+        "AllocationId": {
+          "Fn::GetAtt": [
+            "CodeRunnerLambdaConstructCodeRunnerLambdaVpcPublicSubnet2EIP1CA7F968",
+            "AllocationId",
+          ],
+        },
+        "SubnetId": {
+          "Ref": "CodeRunnerLambdaConstructCodeRunnerLambdaVpcPublicSubnet2Subnet919CF6CC",
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "MyTestStack/CodeRunnerLambdaConstruct/CodeRunnerLambdaVpc/PublicSubnet2",
+          },
+        ],
+      },
+      "Type": "AWS::EC2::NatGateway",
+    },
+    "CodeRunnerLambdaConstructCodeRunnerLambdaVpcPublicSubnet2RouteTable3972B96F": {
+      "Properties": {
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "MyTestStack/CodeRunnerLambdaConstruct/CodeRunnerLambdaVpc/PublicSubnet2",
+          },
+        ],
+        "VpcId": {
+          "Ref": "CodeRunnerLambdaConstructCodeRunnerLambdaVpc2213FFDC",
+        },
+      },
+      "Type": "AWS::EC2::RouteTable",
+    },
+    "CodeRunnerLambdaConstructCodeRunnerLambdaVpcPublicSubnet2RouteTableAssociationABFB5F7E": {
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "CodeRunnerLambdaConstructCodeRunnerLambdaVpcPublicSubnet2RouteTable3972B96F",
+        },
+        "SubnetId": {
+          "Ref": "CodeRunnerLambdaConstructCodeRunnerLambdaVpcPublicSubnet2Subnet919CF6CC",
+        },
+      },
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+    },
+    "CodeRunnerLambdaConstructCodeRunnerLambdaVpcPublicSubnet2Subnet919CF6CC": {
+      "Properties": {
+        "AvailabilityZone": {
+          "Fn::Select": [
+            1,
+            {
+              "Fn::GetAZs": "",
+            },
+          ],
+        },
+        "CidrBlock": "10.0.64.0/18",
+        "MapPublicIpOnLaunch": true,
+        "Tags": [
+          {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Public",
+          },
+          {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Public",
+          },
+          {
+            "Key": "Name",
+            "Value": "MyTestStack/CodeRunnerLambdaConstruct/CodeRunnerLambdaVpc/PublicSubnet2",
+          },
+        ],
+        "VpcId": {
+          "Ref": "CodeRunnerLambdaConstructCodeRunnerLambdaVpc2213FFDC",
+        },
+      },
+      "Type": "AWS::EC2::Subnet",
+    },
+    "CodeRunnerLambdaConstructCodeRunnerLambdaVpcVPCGW7B499723": {
+      "Properties": {
+        "InternetGatewayId": {
+          "Ref": "CodeRunnerLambdaConstructCodeRunnerLambdaVpcIGWD1124BFC",
+        },
+        "VpcId": {
+          "Ref": "CodeRunnerLambdaConstructCodeRunnerLambdaVpc2213FFDC",
+        },
+      },
+      "Type": "AWS::EC2::VPCGatewayAttachment",
     },
     "CodeRunnerLambdaConstructInvocationUserDefaultPolicy21F002BC": {
       "Properties": {
@@ -93,28 +596,9 @@ exports[`CodeRunnerStack matches snapshot 1`] = `
             {
               "Action": "lambda:InvokeFunction",
               "Effect": "Allow",
-              "Resource": [
-                {
-                  "Fn::GetAtt": [
-                    "CodeRunnerLambdaConstructCodeRunnerLambda1B9774BA",
-                    "Arn",
-                  ],
-                },
-                {
-                  "Fn::Join": [
-                    "",
-                    [
-                      {
-                        "Fn::GetAtt": [
-                          "CodeRunnerLambdaConstructCodeRunnerLambda1B9774BA",
-                          "Arn",
-                        ],
-                      },
-                      ":*",
-                    ],
-                  ],
-                },
-              ],
+              "Resource": {
+                "Ref": "CodeRunnerLambdaConstructCodeRunnerLambdaAliaslive4D93CA56",
+              },
             },
           ],
           "Version": "2012-10-17",

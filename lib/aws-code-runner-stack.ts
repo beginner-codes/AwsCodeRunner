@@ -6,11 +6,11 @@ export class AwsCodeRunnerStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
     
-
     const codeRunnerLambda = new CodeRunnerLambdaConstruct(this, 'CodeRunnerLambdaConstruct', {
       createUserForInvoke: true,
       createAccessKeyForUser: true,
-      functionName: "CodeRunnerLambda"
+      functionName: "CodeRunnerLambda",
+      limitInternetAccess: true,
     });
   }
 }

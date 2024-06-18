@@ -5,11 +5,16 @@ import { Construct } from 'constructs';
 import { createHash } from 'crypto';
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
+import { Vpc } from 'aws-cdk-lib/aws-ec2';
+import { Duration } from 'aws-cdk-lib';
 
 interface CodeRunnerLambdaConstructProps {
     readonly createUserForInvoke: boolean;
     readonly createAccessKeyForUser: boolean;
     readonly functionName: string;
+
+     // if we should create a VPC and block outbound calls from lambda, defaults to true
+    readonly limitInternetAccess?: boolean;
 }
 
 export class CodeRunnerLambdaConstruct extends Construct {
@@ -23,12 +28,20 @@ export class CodeRunnerLambdaConstruct extends Construct {
             //  lambda deploy when code has changed
             description: this.computeLambdaHash(),
             handler: 'main.run',
-            functionName: props.functionName
+            functionName: props.functionName,
+            timeout: Duration.seconds(3),
+            memorySize: 128, 
+            vpc: (props.limitInternetAccess || props.limitInternetAccess === undefined) ? new Vpc(this, 'CodeRunnerLambdaVpc') : undefined
           });
+
+          const alias = lambdaResource.addAlias("live", {
+            provisionedConcurrentExecutions: 1
+          });
+          
 
         if (props.createUserForInvoke) {
             const invokeUser = new iam.User(this, "InvocationUser");
-            lambdaResource.grantInvoke(invokeUser);
+            alias.grantInvoke(invokeUser);
 
             if (props.createAccessKeyForUser) {
                 const accessKey = new iam.AccessKey(this, `${props.functionName}AccessKey`, { 
@@ -41,7 +54,6 @@ export class CodeRunnerLambdaConstruct extends Construct {
                 });
             }
         }
-
     }
 
     private computeLambdaHash(): string {
