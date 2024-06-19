@@ -43,6 +43,9 @@ exports[`CodeRunnerStack matches snapshot 1`] = `
         "CodeRunnerLambdaConstructCodeRunnerLambdaVpcPrivateSubnet2RouteTableAssociation42AF5F97",
       ],
       "Properties": {
+        "Architectures": [
+          "arm64",
+        ],
         "Code": {
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
@@ -52,6 +55,7 @@ exports[`CodeRunnerStack matches snapshot 1`] = `
         "Description": "3735afd273444d8d0a557abce0a67ef41735abe16fa6a4af4530306f1068be94",
         "FunctionName": "CodeRunnerLambda",
         "Handler": "main.run",
+        "MemorySize": 128,
         "Role": {
           "Fn::GetAtt": [
             "CodeRunnerLambdaConstructCodeRunnerLambdaServiceRole3FF74FA3",
@@ -102,7 +106,7 @@ exports[`CodeRunnerStack matches snapshot 1`] = `
         },
         "FunctionVersion": {
           "Fn::GetAtt": [
-            "CodeRunnerLambdaConstructCodeRunnerLambdaCurrentVersionF77F62068ac51b79e9ada01c962eaa45cffe1f70",
+            "CodeRunnerLambdaConstructCodeRunnerLambdaCurrentVersionF77F62061a0867628ada27cd304785a540d8f96a",
             "Version",
           ],
         },
@@ -113,7 +117,7 @@ exports[`CodeRunnerStack matches snapshot 1`] = `
       },
       "Type": "AWS::Lambda::Alias",
     },
-    "CodeRunnerLambdaConstructCodeRunnerLambdaCurrentVersionF77F62068ac51b79e9ada01c962eaa45cffe1f70": {
+    "CodeRunnerLambdaConstructCodeRunnerLambdaCurrentVersionF77F62061a0867628ada27cd304785a540d8f96a": {
       "DependsOn": [
         "CodeRunnerLambdaConstructCodeRunnerLambdaVpcPrivateSubnet1DefaultRoute6AF29E3F",
         "CodeRunnerLambdaConstructCodeRunnerLambdaVpcPrivateSubnet1RouteTableAssociation4490A90B",
@@ -138,9 +142,11 @@ exports[`CodeRunnerStack matches snapshot 1`] = `
         "GroupDescription": "Automatic security group for Lambda Function MyTestStackCodeRunnerLambdaConstructCodeRunnerLambdaB30127DB",
         "SecurityGroupEgress": [
           {
-            "CidrIp": "0.0.0.0/0",
-            "Description": "Allow all outbound traffic by default",
-            "IpProtocol": "-1",
+            "CidrIp": "255.255.255.255/32",
+            "Description": "Disallow all traffic",
+            "FromPort": 252,
+            "IpProtocol": "icmp",
+            "ToPort": 86,
           },
         ],
         "VpcId": {
