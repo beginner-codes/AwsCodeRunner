@@ -7,6 +7,7 @@ import { readFileSync } from 'fs';
 import { resolve } from 'path';
 import { Vpc } from 'aws-cdk-lib/aws-ec2';
 import { Duration } from 'aws-cdk-lib';
+import { Architecture } from 'aws-cdk-lib/aws-lambda';
 
 interface CodeRunnerLambdaConstructProps {
     readonly createUserForInvoke: boolean;
@@ -31,13 +32,14 @@ export class CodeRunnerLambdaConstruct extends Construct {
             functionName: props.functionName,
             timeout: Duration.seconds(3),
             memorySize: 128, 
-            vpc: (props.limitInternetAccess || props.limitInternetAccess === undefined) ? new Vpc(this, 'CodeRunnerLambdaVpc') : undefined
+            architecture: Architecture.ARM_64,
+            vpc: this.shouldLimitInternetAccess(props) ? new Vpc(this, 'CodeRunnerLambdaVpc') : undefined,
+            allowAllOutbound: this.shouldLimitInternetAccess(props) ? false : undefined
           });
 
           const alias = lambdaResource.addAlias("live", {
             provisionedConcurrentExecutions: 1
           });
-          
 
         if (props.createUserForInvoke) {
             const invokeUser = new iam.User(this, "InvocationUser");
@@ -54,6 +56,10 @@ export class CodeRunnerLambdaConstruct extends Construct {
                 });
             }
         }
+    }
+    
+    private shouldLimitInternetAccess(props: CodeRunnerLambdaConstructProps): boolean {
+        return (props.limitInternetAccess || props.limitInternetAccess === undefined);
     }
 
     private computeLambdaHash(): string {
