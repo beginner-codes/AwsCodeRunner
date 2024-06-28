@@ -16,6 +16,8 @@ interface CodeRunnerLambdaConstructProps {
 
      // if we should create a VPC and block outbound calls from lambda, defaults to true
     readonly limitInternetAccess?: boolean;
+    // any options for the :live alias (like provisioned concurrency, etc)
+    readonly aliasOptions?: lambda.AliasOptions;
 }
 
 export class CodeRunnerLambdaConstruct extends Construct {
@@ -28,7 +30,7 @@ export class CodeRunnerLambdaConstruct extends Construct {
             // set description as code hash to force changeset diff and 
             //  lambda deploy when code has changed
             description: this.computeLambdaHash(),
-            handler: 'main.run',
+            handler: 'main.lambda_handler',
             functionName: props.functionName,
             timeout: Duration.seconds(3),
             memorySize: 128, 
@@ -37,9 +39,7 @@ export class CodeRunnerLambdaConstruct extends Construct {
             allowAllOutbound: this.shouldLimitInternetAccess(props) ? false : undefined
           });
 
-          const alias = lambdaResource.addAlias("live", {
-            provisionedConcurrentExecutions: 1
-          });
+          const alias = lambdaResource.addAlias("live", props.aliasOptions);
 
         if (props.createUserForInvoke) {
             const invokeUser = new iam.User(this, "InvocationUser");

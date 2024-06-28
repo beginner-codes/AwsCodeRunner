@@ -11,6 +11,7 @@ export class AwsCodeRunnerStack extends cdk.Stack {
       createAccessKeyForUser: true,
       functionName: "CodeRunnerLambda",
       limitInternetAccess: true,
+      aliasOptions: undefined,
     });
   }
 }

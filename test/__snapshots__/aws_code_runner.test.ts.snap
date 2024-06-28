@@ -54,7 +54,7 @@ exports[`CodeRunnerStack matches snapshot 1`] = `
         },
         "Description": "3735afd273444d8d0a557abce0a67ef41735abe16fa6a4af4530306f1068be94",
         "FunctionName": "CodeRunnerLambda",
-        "Handler": "main.run",
+        "Handler": "main.lambda_handler",
         "MemorySize": 128,
         "Role": {
           "Fn::GetAtt": [
@@ -106,18 +106,15 @@ exports[`CodeRunnerStack matches snapshot 1`] = `
         },
         "FunctionVersion": {
           "Fn::GetAtt": [
-            "CodeRunnerLambdaConstructCodeRunnerLambdaCurrentVersionF77F62061a0867628ada27cd304785a540d8f96a",
+            "CodeRunnerLambdaConstructCodeRunnerLambdaCurrentVersionF77F620682ad83b848d283b6127b58862f4f9ebd",
             "Version",
           ],
         },
         "Name": "live",
-        "ProvisionedConcurrencyConfig": {
-          "ProvisionedConcurrentExecutions": 1,
-        },
       },
       "Type": "AWS::Lambda::Alias",
     },
-    "CodeRunnerLambdaConstructCodeRunnerLambdaCurrentVersionF77F62061a0867628ada27cd304785a540d8f96a": {
+    "CodeRunnerLambdaConstructCodeRunnerLambdaCurrentVersionF77F620682ad83b848d283b6127b58862f4f9ebd": {
       "DependsOn": [
         "CodeRunnerLambdaConstructCodeRunnerLambdaVpcPrivateSubnet1DefaultRoute6AF29E3F",
         "CodeRunnerLambdaConstructCodeRunnerLambdaVpcPrivateSubnet1RouteTableAssociation4490A90B",
