@@ -11,7 +11,10 @@ def run(code, stdin):
     exception_data = {}
     stack_depth = len(traceback.extract_stack())
     try:
-        exec(compile(code, "<discord>", "exec"))
+        exec(
+            compile(code, "<discord>", "exec"),
+            {"__name__": "__main__"},
+        )
     except Exception as excp:
         exception_data = {
             "type": type(excp).__qualname__,
