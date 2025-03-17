@@ -50,9 +50,9 @@ exports[`CodeRunnerStack matches snapshot 1`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "e34bb70fc03d63b4e4403f7bb966e9d56f8e650b80329d7cba34d5fe03ae8a10.zip",
+          "S3Key": "d93333f6e9c7d410fff77f367b5158cc5dd050ee26becefc1e9eadfc3c0a865d.zip",
         },
-        "Description": "3735afd273444d8d0a557abce0a67ef41735abe16fa6a4af4530306f1068be94",
+        "Description": "fc9147a1869e841c30d711ac32a11a0b29f722d12f51bb0a288070b071a8b0b9",
         "FunctionName": "CodeRunnerLambda",
         "Handler": "main.lambda_handler",
         "MemorySize": 128,
@@ -106,7 +106,7 @@ exports[`CodeRunnerStack matches snapshot 1`] = `
         },
         "FunctionVersion": {
           "Fn::GetAtt": [
-            "CodeRunnerLambdaConstructCodeRunnerLambdaCurrentVersionF77F620682ad83b848d283b6127b58862f4f9ebd",
+            "CodeRunnerLambdaConstructCodeRunnerLambdaCurrentVersionF77F6206bafdc53734b9b3edac99a1d88c329756",
             "Version",
           ],
         },
@@ -114,7 +114,7 @@ exports[`CodeRunnerStack matches snapshot 1`] = `
       },
       "Type": "AWS::Lambda::Alias",
     },
-    "CodeRunnerLambdaConstructCodeRunnerLambdaCurrentVersionF77F620682ad83b848d283b6127b58862f4f9ebd": {
+    "CodeRunnerLambdaConstructCodeRunnerLambdaCurrentVersionF77F6206bafdc53734b9b3edac99a1d88c329756": {
       "DependsOn": [
         "CodeRunnerLambdaConstructCodeRunnerLambdaVpcPrivateSubnet1DefaultRoute6AF29E3F",
         "CodeRunnerLambdaConstructCodeRunnerLambdaVpcPrivateSubnet1RouteTableAssociation4490A90B",
